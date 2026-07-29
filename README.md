@@ -2,7 +2,6 @@
 
 [![R](https://img.shields.io/badge/R-4.3.0-276DC3.svg?style=flat&logo=r&logoColor=white)](https://www.r-project.org/)
 [![Shiny](https://img.shields.io/badge/Shiny-App-0078D7.svg?style=flat&logo=shiny&logoColor=white)](https://shiny.rstudio.com/)
-[![Deployed](https://img.shields.io/badge/Status-Live-brightgreen.svg)](https://neuropredictai.shinyapps.io/test_funcml/)
 
 **NeuroVigil** (formerly NeuroPredict AI) is a trilingual (French, English, Arabic) Clinical Decision Support System (CDSS) designed to predict the risk of Mild Cognitive Impairment (MCI) converting to Alzheimer's Disease (AD) within a 24-month window. 
 
