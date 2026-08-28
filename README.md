@@ -83,18 +83,20 @@ The application will open in your default web browser at `http://127.0.0.1:3838`
 NeuroVigil/
 └── ModelFuncml.Rproj      #Ml code
 ├── app.R                  # Main Shiny application logic and UI
-├── README.md              # Project documentation
-├── www/                   # Static assets
-│   └── logo_cm6ri.png     # CM6RI institutional logo
+├── README.md
+├── outputs/                           
+│   ├── hyperparameter_grid_full.csv   
+│   ├── temporal_robustness_table.csv  
+│   └── 03_Metriques_Fairness_EN.csv          
 └── data/
     └── processed/
         └── Tabular data/
             └── FINAL_DATASET.csv
             └── train_KNN_imputed.csv
-            └── funcml_ready/
-                ├── modele_final_xgboost.rds    # Serialized XGBoost model
-                ├── data_train_reference.rds    # Reference cohort for KNN
-                └── metriques_modele.rds        # Model performance metrics
+            └── adni_knn_imputed.csv
+            └── modele_final_xgboost.rds    # Serialized XGBoost model
+            └──data_train_reference.rds     # Reference cohort for KNN
+            └── metriques_modele.rds        # Model performance metrics
 ```
 
 ---
