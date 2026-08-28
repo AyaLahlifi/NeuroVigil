@@ -102,5 +102,7 @@ NeuroVigil/
 - **Training Data:** This model was trained on the **Alzheimer’s Disease Neuroimaging Initiative (ADNI)** dataset. ADNI data is subject to a Data Use Agreement and is **not** included in this repository. Researchers can request access at [adni.loni.usc.edu](https://adni.loni.usc.edu/).
 - **Model Artifacts:** The repository contains only the serialized model weights (`.rds` files) and a synthetic reference cohort structure, ensuring no raw patient data is exposed.
 - **Ethical Auditing:** The model includes built-in fairness metrics to ensure equitable performance across diverse demographic subgroups.
+<img width="6682" height="7232" alt="System_Architecture" src="https://github.com/user-attachments/assets/554bce6a-5f53-42f3-8bbd-7210ed0b96bd" />
+
 
 
