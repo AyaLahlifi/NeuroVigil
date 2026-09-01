@@ -52,6 +52,7 @@ NeuroVigil is built on a robust, end-to-end machine learning pipeline validated 
 ---
 
 ## Project Structure
+```text
 NeuroVigil/
 ├── README.md
 ├── NeuroVigil_App/
@@ -70,6 +71,12 @@ NeuroVigil/
     ├── etape3.R
     ├── etape4.R
     └── etape5.R
+```
+## Data Availability & Ethics
+Training Data: This model was trained on the Alzheimer’s Disease Neuroimaging Initiative (ADNI) dataset. ADNI data is subject to a Data Use Agreement and is not included in this repository. Researchers can request access at adni.loni.usc.edu.
+Model Artifacts: The repository contains only the serialized model weights (.rds files) and a synthetic reference cohort structure, ensuring no raw patient data is exposed.
+Ethical Auditing: The model includes built-in fairness metrics to ensure equitable performance across diverse demographic subgroups, with transparent reporting of known disparities (e.g., APOE-ε4 status).
+
 
 
 ##  How to Run Locally
