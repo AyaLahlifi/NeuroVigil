@@ -11,19 +11,19 @@ Developed for the **Centre Mohammed VI de la Recherche et de l'Innovation (CM6RI
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
-- **🩺 Leakage-Safe KNN Imputation:** Handles missing clinical data in real-time. Imputation is strictly fit on the training cohort and applied to new data, preventing data leakage and preserving statistical integrity.
-- **🎯 Dual-Threshold Risk Stratification:** Moves beyond arbitrary cutoffs. Utilizes **Youden’s Index (τ = 0.124)** for sensitive screening and a **"Rule-In" operating point (τ = 0.369, Specificity ≥ 90%)** to ensure high-risk flags carry a <10% false-positive rate, justifying intensive clinical intervention.
-- **🔍 Explainable AI (XAI):** Integrates SHAP, Permutation Importance, and Accumulated Local Effects (ALE) to provide transparent, interpretable risk scores for clinicians.
-- **⚖️ Algorithmic Fairness:** Rigorously audited across sex, APOE-ε4 status, and education levels to ensure equitable predictions and mitigate algorithmic bias.
-- **🌍 Trilingual & RTL Support:** Fully localized interface for French, English, and Arabic, including native Right-to-Left (RTL) layout support.
-- **📊 Batch & Single Processing:** Supports both individual patient analysis and bulk Excel-based cohort screening for epidemiological surveillance.
+- **Leakage-Safe KNN Imputation:** Handles missing clinical data in real-time. Imputation is strictly fit on the training cohort and applied to new data, preventing data leakage and preserving statistical integrity.
+- **Dual-Threshold Risk Stratification:** Moves beyond arbitrary cutoffs. Utilizes **Youden’s Index (τ = 0.124)** for sensitive screening and a **"Rule-In" operating point (τ = 0.369, Specificity ≥ 90%)** to ensure high-risk flags carry a <10% false-positive rate, justifying intensive clinical intervention.
+- **Explainable AI (XAI):** Integrates SHAP, Permutation Importance, and Accumulated Local Effects (ALE) to provide transparent, interpretable risk scores for clinicians.
+- **Algorithmic Fairness:** Rigorously audited across sex, APOE-ε4 status, and education levels to ensure equitable predictions and mitigate algorithmic bias.
+- **Trilingual & RTL Support:** Fully localized interface for French, English, and Arabic, including native Right-to-Left (RTL) layout support.
+- **Batch & Single Processing:** Supports both individual patient analysis and bulk Excel-based cohort screening for epidemiological surveillance.
 - ** Automated PDF Reporting:** Generates comprehensive, branded clinical reports featuring calibrated risk gauges, DCA visualizations, and explicit "measured vs. estimated" data transparency.
 
 ---
 
-## 🏗️ Architecture & Methodology
+## Architecture & Methodology
 
 NeuroVigil is built on a robust, end-to-end machine learning pipeline validated on the Alzheimer’s Disease Neuroimaging Initiative (ADNI) cohort (N = 1,288).
 
@@ -41,7 +41,7 @@ NeuroVigil is built on a robust, end-to-end machine learning pipeline validated 
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Language:** R
 - **Framework:** Shiny
@@ -73,9 +73,9 @@ NeuroVigil/
     └── etape5.R
 ```
 ## Data Availability & Ethics
-Training Data: This model was trained on the Alzheimer’s Disease Neuroimaging Initiative (ADNI) dataset. ADNI data is subject to a Data Use Agreement and is not included in this repository. Researchers can request access at adni.loni.usc.edu.
-Model Artifacts: The repository contains only the serialized model weights (.rds files) and a synthetic reference cohort structure, ensuring no raw patient data is exposed.
-Ethical Auditing: The model includes built-in fairness metrics to ensure equitable performance across diverse demographic subgroups, with transparent reporting of known disparities (e.g., APOE-ε4 status).
+-**Training Data:** This model was trained on the Alzheimer’s Disease Neuroimaging Initiative (ADNI) dataset. ADNI data is subject to a Data Use Agreement and is not included in this repository. Researchers can request access at adni.loni.usc.edu.
+-**Model Artifacts:** The repository contains only the serialized model weights (.rds files) and a synthetic reference cohort structure, ensuring no raw patient data is exposed.
+-**Ethical Auditing:** The model includes built-in fairness metrics to ensure equitable performance across diverse demographic subgroups, with transparent reporting of known disparities (e.g., APOE-ε4 status).
 
 
 
