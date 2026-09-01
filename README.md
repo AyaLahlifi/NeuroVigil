@@ -7,7 +7,7 @@
 
 Developed for the **Centre Mohammed VI de la Recherche et de l'Innovation (CM6RI)** and the **Université Mohammed VI des Sciences de la Santé (UM6SS)**, this tool bridges the gap between advanced, leakage-safe machine learning and frontline neurological practice.
 
-🚀 **[Launch the Live Web Application](https://neuropredictai.shinyapps.io/NeuroVigil_App/)**
+**[Launch the Live Web Application](https://neuropredictai.shinyapps.io/NeuroVigil_App/)**
 
 ---
 
