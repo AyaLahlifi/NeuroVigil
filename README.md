@@ -64,6 +64,7 @@ NeuroVigil/
 │       ├── modele_final_xgboost_2F.rds
 │       ├── metriques_modele_2F.rds
 │       ├── recette_imputation.rds
+|       ├── historique_predictions.csv
 │       └── data_train_reference.rds
 └── scripts/                   
     ├── etape1.R
