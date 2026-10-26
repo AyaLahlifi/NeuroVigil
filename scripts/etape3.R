@@ -9,10 +9,11 @@ library(recipes)
 project_root <- "C:/Users/ayala/OneDrive/Attachments/Documents/TEST_FUNCML/data-ADNI-stage02"
 path_tabular <- file.path(project_root, "data/processed/Tabular data")
 
-df_brut <- read_csv(file.path(path_tabular, "FINAL_DATASET.csv"))
+df_brut <- read_csv(file.path(path_tabular, "FINAL_DATASET.csv"), show_col_types = FALSE)
 
-tester_horizon <- function(df, horizon_mois, seuil_na = 60) {
+tester_horizon_corrige <- function(df, horizon_mois, seuil_na = 60) {
   
+  # 1. Création de la cible
   df <- df %>%
     mutate(target = case_when(
       event == 1 & time_to_event <= horizon_mois ~ "Yes",
@@ -20,6 +21,7 @@ tester_horizon <- function(df, horizon_mois, seuil_na = 60) {
     ),
     target = factor(target, levels = c("No", "Yes")))
   
+  # 2. Filtrage des variables avec trop de NA
   miss_summary <- df %>%
     summarise(across(everything(), ~ mean(is.na(.)) * 100)) %>%
     pivot_longer(everything(), names_to = "variable", values_to = "pct_na")
@@ -30,29 +32,35 @@ tester_horizon <- function(df, horizon_mois, seuil_na = 60) {
     select(-any_of(c("EXAMDATE", "STATUS", "subject_id", "entry_date", "visit"))) %>%
     mutate(
       PTGENDER = factor(PTGENDER, levels = c(1, 2), labels = c("Homme", "Femme")),
-      n_e4     = str_count(GENOTYPE, "4"),
+      n_e4     = str_count(as.character(GENOTYPE), "4"), # Sécurisé avec as.character
       GENOTYPE = factor(GENOTYPE)
     )
-
-  # SPLIT AVANT IMPUTATION 
+  
+  # 3. SPLIT AVANT IMPUTATION (Déjà correct dans votre version)
   set.seed(42)
   idx_test <- sample(nrow(df_sel), size = round(0.2 * nrow(df_sel)))
   data_train_raw <- df_sel[-idx_test, ]
   data_test_raw  <- df_sel[idx_test, ]
   
-  # IMPUTATION : recipe apprise sur TRAIN, appliquée au TEST via bake()
+  # 4. IMPUTATION CORRIGÉE (Anti-Leakage)
   recipe_h <- recipe(target ~ ., data = data_train_raw) %>%
-    step_impute_knn(all_predictors())
+    # ⚠️ CORRECTION CLÉ : On exclut RID, event et time_to_event de l'imputation KNN
+    update_role(RID, event, time_to_event, new_role = "ignore") %>%
+    step_impute_knn(all_predictors(), neighbors = 5) # k=5 explicité pour la reproductibilité
+  
   recipe_h_prep <- prep(recipe_h, training = data_train_raw)
   
   data_train <- bake(recipe_h_prep, new_data = NULL)
   data_test  <- bake(recipe_h_prep, new_data = data_test_raw)
   
+  # 5. Préparation pour le modèle
   vars_predicteurs <- data_train %>%
-    select(-RID, -event, -time_to_event, -target, -GENOTYPE) %>%
+    select(-any_of(c("RID", "event", "time_to_event", "target", "GENOTYPE"))) %>%
     names()
+  
   formula_cls <- as.formula(paste("target ~", paste(vars_predicteurs, collapse = " + ")))
   
+  # 6. Benchmark
   cmp <- compare_learners(
     data = data_train, formula = formula_cls,
     models = c("glm", "ranger", "xgboost"),
@@ -65,13 +73,12 @@ tester_horizon <- function(df, horizon_mois, seuil_na = 60) {
     is.data.frame(x) && "model" %in% names(x)))[1]]]
   
   if (is.null(cmp_df)) {
-    stop("Tableau non trouvé dans cmp. Eléments disponibles : ",
-         paste(names(cmp_liste), collapse = ", "))
+    stop("Tableau non trouvé dans cmp.")
   }
   
+  # 7. Fit final et évaluation
   fit_h <- fit(formula = formula_cls, data = data_train, model = "xgboost")
   
-  # Calcul manuel de l'AUC
   probs_test <- predict(fit_h, data_test, type = "prob")[, "Yes"]
   labels_test <- data_test$target
   pos <- probs_test[labels_test == "Yes"]
@@ -80,23 +87,20 @@ tester_horizon <- function(df, horizon_mois, seuil_na = 60) {
   perf_test <- (sum(r[seq_along(pos)]) - length(pos) * (length(pos) + 1) / 2) /
     (length(pos) * length(neg))
   
-  perm_h <- interpret(fit_h, data_test, formula = formula_cls, method = "permute",
+  # 8. Interprétabilité (Permutation)
+  perm_h <- interpret(fit_h, data_test, method = "permute",
                       metric = "auc", type = "prob", nsim = 10, seed = 42)
   
   perm_df <- perm_h$result$scores
   col_variable <- intersect(c("feature", "Variable", "variable", "term"), names(perm_df))[1]
   col_importance <- intersect(c("importance", "Importance", "mean_importance", "score"), names(perm_df))[1]
   
-  if (is.na(col_variable) || is.na(col_importance)) {
-    stop("Colonnes non reconnues dans perm_h$result$scores. Noms réels : ",
-         paste(names(perm_df), collapse = ", "))
-  }
-  
   top5 <- perm_df %>%
     arrange(desc(.data[[col_importance]])) %>%
     slice_head(n = 5) %>%
     pull(.data[[col_variable]])
   
+  # 9. Retour des résultats
   list(
     horizon        = horizon_mois,
     n_yes          = sum(data_train$target == "Yes") + sum(data_test$target == "Yes"),
@@ -107,15 +111,19 @@ tester_horizon <- function(df, horizon_mois, seuil_na = 60) {
   )
 }
 
-## tester sur 3 horizons ------------------------------------------
+## Exécution sur 3 horizons ------------------------------------------
+cat("Lancement de l'analyse de robustesse temporelle ...\n")
 horizons_a_tester <- c(12, 24, 36)
 
-resultats <- map(horizons_a_tester, ~ tester_horizon(df_brut, .x))
+resultats <- map(horizons_a_tester, ~ tester_horizon_corrige(df_brut, .x))
 resultats_table <- bind_rows(lapply(resultats, as_tibble))
 
 print(resultats_table)
 
+# Sauvegarde des nouveaux résultats
 path_funcml_ready <- file.path(project_root, "data/processed/Tabular data/funcml_ready")
-saveRDS(resultats_table, file.path(path_funcml_ready, "resultats_table_2F.rds"))
-write.csv(resultats_table, file.path(path_funcml_ready, "temporal_robustness_table_2F.csv"),
+saveRDS(resultats_table, file.path(path_funcml_ready, "resultats_table_2F_CORRIGE.rds"))
+write.csv(resultats_table, file.path(path_funcml_ready, "temporal_robustness_table_2F_CORRIGE.csv"),
           row.names = FALSE)
+
+cat("\n✅ Analyse de robustesse terminée et sauvegardée avec succès.\n")
