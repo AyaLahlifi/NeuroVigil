@@ -1,0 +1,17 @@
+# ADNI data and anything derived from it must NOT be committed (ADNI Data Use Agreement)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+# the saved recipe and the reference cohort contain ADNI training data
+app/data/*.rds
+*.rds
+# R / RStudio
+.Rhistory
+.RData
+.Rproj.user/
+.Renviron
+rsconnect/
+# app: patient entries written at run time, and anything per-patient
+app/data/*.csv
+outputs/*.csv
