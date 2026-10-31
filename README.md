@@ -35,13 +35,4 @@ data/processed/, outputs/           generated files
 
 Expected main results: test AUC 0.871 (95% CI 0.824 to 0.919), ECE 0.056, thresholds 0.124 and 0.369.
 
-## Lessons learned
 
-In an earlier version of script 03, the imputation recipe was written as `recipe(target ~ ., data = train)`, so
-`event` and `time_to_event` served as imputation predictors and leaked outcome information (test AUC inflated by up to 0.038).
-Script 03 now imputes with predictors only; set `COMPARE_WITH_LEAKY <- TRUE` in that script to reproduce the comparison.
-
-## Data use
-
-Do not commit ADNI data or files derived from it. The saved imputation recipe and the app's reference cohort contain
-ADNI training data and are excluded by `.gitignore`.
