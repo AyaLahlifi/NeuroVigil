@@ -5,7 +5,7 @@ Interpretable and equitable prediction of 24-month MCI-to-Alzheimer's conversion
 
 > **Research prototype, not a medical device.** The model has not been externally validated and must not be used for clinical decisions.
 
-- Tutorial: *(link to the published HTML tutorial)*
+
 - Live app: https://neuropredictai.shinyapps.io/NeuroVigil_App/
 
 ## Repository layout
@@ -19,7 +19,7 @@ scripts/04_prediction_nouveau_patient.R   three-level prediction for a new patie
 scripts/05_dca_fairness.R           decision curve analysis, fairness audit
 scripts/run_all.R                   runs 01 to 05
 app/app.R                           Shiny application
-data/raw/                           put FINAL_DATASET.csv here (not distributed)
+data/raw/                           
 data/processed/, outputs/           generated files
 ```
 
