@@ -26,8 +26,7 @@ data/processed/, outputs/           generated files
 ## Reproducing the results
 
 1. **Get the data.** ADNI data are not distributed. Apply for access at https://adni.loni.usc.edu/ and place
-   `FINAL_DATASET.csv` in `data/raw/`, or point to another folder with `Sys.setenv(NEUROVIGIL_DATA = "path/to/data")`
-   (it must contain `raw/FINAL_DATASET.csv`).
+   it in `data/raw/`, or point to another folder with `Sys.setenv(NEUROVIGIL_DATA = "path/to/data")`.
 2. **Open `NeuroVigil.Rproj`** in RStudio (workspace restore is disabled on purpose) and install the packages:
    `install.packages(c("here","tidyverse","recipes","funcml","pROC","xgboost","ranger","gbm"))`
    (funcml: `remotes::install_github("ielbadisy/funcml")`; for the app also `shiny`, `DT`, `readxl`, `writexl`, `pagedown`, `base64enc`).
